@@ -1,11 +1,14 @@
 package com.dennisdavydov.quizapp.activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.dennisdavydov.quizapp.R;
+import com.dennisdavydov.quizapp.utilities.ActivityUtilities;
 import com.dennisdavydov.quizapp.utilities.AppUtilities;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -18,7 +21,10 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    private Activity activity;
+    private Context context;
 
     private Toolbar toolbar;
     private AccountHeader header = null;
@@ -28,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        activity = MainActivity.this;
+        context = getApplicationContext();
 
         final IProfile profile =new ProfileDrawerItem().withIcon(R.drawable.ic_dev);
 
@@ -38,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
                 .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
                     @Override
                     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-                        //TODO: InvokeCustomURLActivity
+                        ActivityUtilities.getInstance()
+                                .invokeCustomUrlActivity(activity, CustomUrlActivity.class,
+                                        getResources().getString(R.string.site),
+                                        getResources().getString(R.string.site_url),false);
                         return false;
                     }
 
@@ -75,7 +89,46 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        //TODO Add invoke Drawer inems Activity
+
+                        if (drawerItem != null){
+                            Intent intent = null;
+                            switch (String.valueOf(drawerItem.getIdentifier())){
+                                case "10": {
+                                    ActivityUtilities.getInstance()
+                                            .invokeNewActivity(activity,AboutDevActivity.class,false);
+                                }break;
+                                case "20": {
+                                    AppUtilities.youtubeLink(activity);
+                                }break;
+                                case "21": {
+                                    AppUtilities.facebookLink(activity);
+                                }break;
+                                case "22": {
+                                    AppUtilities.twiterLink(activity);
+                                }break;
+                                case "23": {
+                                    AppUtilities.googlePlusLink(activity);
+                                }break;
+                                case "30": {
+                                    // TODO invoke SettingsActivity
+                                }break;
+                                case "31": {
+                                    AppUtilities.rateThisApp(activity);
+                                }break;
+                                case "32": {
+                                    AppUtilities.shareApp(activity);
+                                }break;
+                                case "33": {
+                                    ActivityUtilities.getInstance().invokeCustomUrlActivity(activity,CustomUrlActivity.class,
+                                            getResources().getString(R.string.privacy),
+                                            getResources().getString(R.string.privacy_url),false);
+                                }break;
+                                case "40": {
+
+                                }break;
+                            }
+                        }
+
                         return false;
                     }
                 })

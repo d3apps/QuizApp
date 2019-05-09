@@ -2,9 +2,14 @@ package com.dennisdavydov.quizapp.utilities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.widget.Toast;
 
 import com.dennisdavydov.quizapp.R;
+import com.dennisdavydov.quizapp.constants.AppConstants;
 
 public class AppUtilities {
     private static long backPressed = 0;
@@ -21,4 +26,71 @@ public class AppUtilities {
         }
         backPressed = System.currentTimeMillis();
     }
+
+    public static void youtubeLink (Activity activity){
+        updateLink(activity,activity.getString(R.string.youtube_url));
+    }
+
+    public static void facebookLink(Activity activity){
+        try {
+            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(AppConstants.FACEBOOK_PACKAGENAME,0);
+            if (applicationInfo.enabled){
+                updateLink(activity,AppConstants.FACEBOOK_FACEWEBMODAL + activity.getString(R.string.facebook_url));
+                return;
+            }
+        } catch (PackageManager.NameNotFoundException ignored){
+            updateLink(activity,activity.getString(R.string.facebook_url));
+        }
+    }
+
+    public static void twiterLink (Activity activity){
+        try {
+            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(AppConstants.TWITTER_PACKAGENAME,0);
+            if (applicationInfo.enabled){
+                updateLink(activity, activity.getString(R.string.twitter_user_id));
+                return;
+            }
+        }catch (PackageManager.NameNotFoundException ignored) {
+            updateLink(activity, activity.getString(R.string.twitter_user_id));
+        }
+    }
+
+    public static void googlePlusLink(Activity activity){
+        updateLink(activity, activity.getString(R.string.google_plus_url));
+    }
+
+
+    private static void updateLink(Activity activity, String text){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PackageManager packageManager = activity.getPackageManager();
+        if (packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)!= null){
+            activity.startActivity(intent);
+        }
+    }
+
+    public static void shareApp (Activity activity){
+        try {
+            final String appPackageName = activity.getPackageName();
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, activity.getResources().getString(R.string.share)
+                    + AppConstants.GOOGLE_PLAY_URL + appPackageName);
+            sendIntent.setType(activity.getString(R.string.intent_type));
+            activity.startActivity(sendIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void rateThisApp (Activity activity){
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(AppConstants.GOOGLE_PLAY_URL + activity.getPackageName())));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
+
