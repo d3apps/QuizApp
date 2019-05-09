@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Quizz Application</string>
+    <string name="tv_description">Try your brain!</string>
+    <string name="about_app">About Application</string>
+    <string name="you_tube">YouTube</string>
+    <string name="facebook">FaceBook</string>
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="settings">Settings</string>
+    <string name="rate_us">Rate Application</string>
+    <string name="share">Share</string>
+    <string name="exit">Exit</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="tap_again">Press back twice to exit</string>
+    <string name="encoding">utf-8</string>
+</resources>
