@@ -31,29 +31,29 @@ public class CustomUrlActivity extends BaseActivity {
 
     }
 
-    private void initVar (){
+    private void initVar() {
         activity = CustomUrlActivity.this;
         context = activity.getApplicationContext();
 
         Intent intent = getIntent();
-        if (intent != null){
+        if (intent != null) {
             pageTitle = intent.getStringExtra(AppConstants.BUNDLE_KEY_TITLE);
             pageUrl = intent.getStringExtra(AppConstants.BUNDLE_KEY_URL);
-
         }
     }
 
-    private void initView(){
+    private void initView() {
         setContentView(R.layout.activity_custom_url);
-        initLoader();
         initWebEngine();
+        initLoader();
         initToolbar(true);
         setToolbarTitle(pageTitle);
         enableUpButton();
     }
 
-    public void initWebEngine(){
-        webView = (WebView) findViewById(R.id.webView);
+    public void initWebEngine() {
+        webView = findViewById(R.id.webView);
+
         webEngine = new WebEngine(webView, activity);
         webEngine.initWebView();
 
@@ -75,7 +75,7 @@ public class CustomUrlActivity extends BaseActivity {
 
             @Override
             public void onNetworkError() {
-
+                showEmptyView();
             }
 
             @Override
@@ -85,20 +85,22 @@ public class CustomUrlActivity extends BaseActivity {
         });
     }
 
-    private void initFunctionality(){
+    private void initFunctionality() {
         webEngine.loadPage(pageUrl);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
 
-                default:
-                    return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
+
 
     }
 }

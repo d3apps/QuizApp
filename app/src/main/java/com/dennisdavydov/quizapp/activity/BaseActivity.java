@@ -24,56 +24,58 @@ public class BaseActivity extends AppCompatActivity {
 
         activity = BaseActivity.this;
         context = activity.getApplicationContext();
-
     }
 
-    public void initToolbar(boolean isTitleEnabled){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+    public void initToolbar(boolean isTitleEnabled) {
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(isTitleEnabled);
     }
 
-    public void setToolbarTitle(String title){
-        if (getSupportActionBar()!= null){
+    public void setToolbarTitle(String title) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
     }
 
-    public  void enableUpButton(){
-        if (getSupportActionBar()!= null){
+    public void enableUpButton() {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         }
     }
 
     public void initLoader() {
-        loadingView = (LinearLayout) findViewById(R.id.loadingView);
-        noDataView = (LinearLayout) findViewById(R.id.noDataView);
+        loadingView = findViewById(R.id.loadingView);
+        noDataView = findViewById(R.id.noDataView);
     }
 
     public void showLoader() {
-        if (loadingView != null){
+        if (loadingView != null) {
             loadingView.setVisibility(View.VISIBLE);
         }
-        if (noDataView != null){
+
+        if (noDataView != null) {
             noDataView.setVisibility(View.GONE);
         }
     }
 
     public void hideLoader() {
-        if (loadingView != null){
+        if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
         }
-        if (noDataView != null){
+
+        if (noDataView != null) {
             noDataView.setVisibility(View.GONE);
         }
     }
+
     public void showEmptyView() {
-        if (loadingView != null){
+        if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
         }
-        if (noDataView != null){
+
+        if (noDataView != null) {
             noDataView.setVisibility(View.VISIBLE);
         }
     }

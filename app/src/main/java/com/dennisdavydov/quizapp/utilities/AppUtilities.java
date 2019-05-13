@@ -12,85 +12,85 @@ import com.dennisdavydov.quizapp.R;
 import com.dennisdavydov.quizapp.constants.AppConstants;
 
 public class AppUtilities {
+
     private static long backPressed = 0;
-    
-    public static void showToast (Context context, String message){
-        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-    
-    public static void tapPromptToExit (Activity activity){
-        if (backPressed + 2500 > System.currentTimeMillis()){
+
+    public  static void tapPromtToExit(Activity activity) {
+        if (backPressed + 2500 > System.currentTimeMillis()) {
             activity.finish();
-        } else  {
+        } else {
             showToast(activity.getApplicationContext(), activity.getResources().getString(R.string.tap_again));
         }
         backPressed = System.currentTimeMillis();
     }
 
-    public static void youtubeLink (Activity activity){
-        updateLink(activity,activity.getString(R.string.youtube_url));
+    public static void youtubeLink(Activity activity) {
+        updateLink(activity, activity.getString(R.string.youtube_url));
     }
 
-    public static void facebookLink(Activity activity){
+    public static void facebookLink(Activity activity) {
         try {
-            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(AppConstants.FACEBOOK_PACKAGENAME,0);
-            if (applicationInfo.enabled){
-                updateLink(activity,AppConstants.FACEBOOK_FACEWEBMODAL + activity.getString(R.string.facebook_url));
+            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo("com.facebook.katana", 0);
+            if (applicationInfo.enabled) {
+                updateLink(activity, "fb://facewebmodal/f?href=" + activity.getString(R.string.facebook_url));
                 return;
             }
-        } catch (PackageManager.NameNotFoundException ignored){
-            updateLink(activity,activity.getString(R.string.facebook_url));
+        } catch (PackageManager.NameNotFoundException ignored) {
+            updateLink(activity, activity.getString(R.string.facebook_url));
         }
     }
 
-    public static void twiterLink (Activity activity){
+    public static void twitterLink(Activity activity) {
         try {
-            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(AppConstants.TWITTER_PACKAGENAME,0);
-            if (applicationInfo.enabled){
+            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo("com.twitter.android", 0);
+            if (applicationInfo.enabled) {
                 updateLink(activity, activity.getString(R.string.twitter_user_id));
                 return;
             }
-        }catch (PackageManager.NameNotFoundException ignored) {
-            updateLink(activity, activity.getString(R.string.twitter_user_id));
+        } catch (PackageManager.NameNotFoundException ignored) {
+            updateLink(activity, activity.getString(R.string.twitter_url));
         }
     }
 
-    public static void googlePlusLink(Activity activity){
+    public static void googlePlusLink(Activity activity) {
         updateLink(activity, activity.getString(R.string.google_plus_url));
     }
 
-
-    private static void updateLink(Activity activity, String text){
+    private static void updateLink(Activity activity, String text) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PackageManager packageManager = activity.getPackageManager();
-        if (packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)!= null){
+        if (packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
             activity.startActivity(intent);
         }
     }
 
-    public static void shareApp (Activity activity){
+    public static void shareApp(Activity activity) {
         try {
             final String appPackageName = activity.getPackageName();
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, activity.getResources().getString(R.string.share)
-                    + AppConstants.GOOGLE_PLAY_URL + appPackageName);
-            sendIntent.setType(activity.getString(R.string.intent_type));
+                    + " https://play.google.com/store/apps/details?id=" + appPackageName);
+            sendIntent.setType("text/plain");
             activity.startActivity(sendIntent);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void rateThisApp (Activity activity){
+    public static void rateThisApp(Activity activity) {
         try {
             activity.startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(AppConstants.GOOGLE_PLAY_URL + activity.getPackageName())));
-        }catch (Exception e){
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + activity.getPackageName())));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }
+
 

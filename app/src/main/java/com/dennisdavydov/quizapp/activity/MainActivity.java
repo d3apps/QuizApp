@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.dennisdavydov.quizapp.R;
+import com.dennisdavydov.quizapp.adapters.CategoryAdapter;
+import com.dennisdavydov.quizapp.constants.AppConstants;
+import com.dennisdavydov.quizapp.models.quiz.CategoryModel;
 import com.dennisdavydov.quizapp.utilities.ActivityUtilities;
 import com.dennisdavydov.quizapp.utilities.AppUtilities;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -21,26 +26,53 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 public class MainActivity extends BaseActivity {
 
     private Activity activity;
     private Context context;
 
     private Toolbar toolbar;
+
     private AccountHeader header = null;
-    private Drawer drawer= null;
+    private Drawer drawer = null;
+
+    private ArrayList<CategoryModel> categoryList;
+    private CategoryAdapter adapter = null;
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar =  findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         activity = MainActivity.this;
         context = getApplicationContext();
 
-        final IProfile profile =new ProfileDrawerItem().withIcon(R.drawable.ic_dev);
+
+
+        recyclerView = findViewById(R.id.rvContent);
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false));
+
+        categoryList = new ArrayList<>();
+        adapter = new CategoryAdapter(context, activity, categoryList);
+        recyclerView.setAdapter(adapter);
+
+        initLoader();
+        loadData();
+
+        final IProfile profile = new ProfileDrawerItem().withIcon(R.drawable.ic_dev);
 
         header = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -49,10 +81,8 @@ public class MainActivity extends BaseActivity {
                 .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
                     @Override
                     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-                        ActivityUtilities.getInstance()
-                                .invokeCustomUrlActivity(activity, CustomUrlActivity.class,
-                                        getResources().getString(R.string.site),
-                                        getResources().getString(R.string.site_url),false);
+                        ActivityUtilities.getInstance().invokeCustomUrlActivity(activity, CustomUrlActivity.class,
+                                getResources().getString(R.string.site), getResources().getString(R.string.site_url), false);
                         return false;
                     }
 
@@ -63,69 +93,59 @@ public class MainActivity extends BaseActivity {
                 })
                 .addProfiles(profile)
                 .build();
+
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withHasStableIds(true)
                 .withAccountHeader(header)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.about_app).withIcon(R.drawable.ic_dev).withIdentifier(10).withSelectable(false),
+                        new PrimaryDrawerItem().withName("О приложении").withIcon(R.drawable.ic_dev).withIdentifier(10).withSelectable(false),
 
-                        new SecondaryDrawerItem().withName(R.string.you_tube).withIcon(R.drawable.ic_youtube).withIdentifier(20).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.facebook).withIcon(R.drawable.ic_facebook).withIdentifier(21).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.twitter).withIcon(R.drawable.ic_twitter).withIdentifier(22).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.googleplus).withIcon(R.drawable.ic_google_plus).withIdentifier(23).withSelectable(false),
-
-                        new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.settings).withIcon(R.drawable.ic_settings).withIdentifier(30).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.rate_us).withIcon(R.drawable.ic_rating).withIdentifier(31).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.share).withIcon(R.drawable.ic_share).withIdentifier(32).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.privacy).withIcon(R.drawable.ic_privacy_policy).withIdentifier(33).withSelectable(false),
+                        new SecondaryDrawerItem().withName("YouTube").withIcon(R.drawable.ic_youtube).withIdentifier(20).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Facebook").withIcon(R.drawable.ic_facebook).withIdentifier(21).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Twitter").withIcon(R.drawable.ic_twitter).withIdentifier(22).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Google+").withIcon(R.drawable.ic_google_plus).withIdentifier(23).withSelectable(false),
 
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_dev).withIdentifier(40).withSelectable(false)
+                        new SecondaryDrawerItem().withName("Настройки").withIcon(R.drawable.ic_settings).withIdentifier(30).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Оцените приложение").withIcon(R.drawable.ic_rating).withIdentifier(31).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Поделитесь").withIcon(R.drawable.ic_share).withIdentifier(32).withSelectable(false),
+                        new SecondaryDrawerItem().withName("Соглашения").withIcon(R.drawable.ic_privacy_policy).withIdentifier(33).withSelectable(false),
+
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("Выход").withIcon(R.drawable.ic_exit).withIdentifier(40).withSelectable(false)
+
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-                        if (drawerItem != null){
+                        if (drawerItem != null) {
                             Intent intent = null;
-                            switch (String.valueOf(drawerItem.getIdentifier())){
-                                case "10": {
-                                    ActivityUtilities.getInstance()
-                                            .invokeNewActivity(activity,AboutDevActivity.class,false);
-                                }break;
-                                case "20": {
-                                    AppUtilities.youtubeLink(activity);
-                                }break;
-                                case "21": {
-                                    AppUtilities.facebookLink(activity);
-                                }break;
-                                case "22": {
-                                    AppUtilities.twiterLink(activity);
-                                }break;
-                                case "23": {
-                                    AppUtilities.googlePlusLink(activity);
-                                }break;
-                                case "30": {
-                                    // TODO invoke SettingsActivity
-                                }break;
-                                case "31": {
-                                    AppUtilities.rateThisApp(activity);
-                                }break;
-                                case "32": {
-                                    AppUtilities.shareApp(activity);
-                                }break;
-                                case "33": {
-                                    ActivityUtilities.getInstance().invokeCustomUrlActivity(activity,CustomUrlActivity.class,
-                                            getResources().getString(R.string.privacy),
-                                            getResources().getString(R.string.privacy_url),false);
-                                }break;
-                                case "40": {
+                            if (drawerItem.getIdentifier() == 10) {
+                                ActivityUtilities.getInstance().invokeNewActivity(activity, AboutDevActivity.class, false);
 
-                                }break;
+                            } else if (drawerItem.getIdentifier() == 20) {
+                                AppUtilities.youtubeLink(activity);
+                            } else if (drawerItem.getIdentifier() == 21) {
+                                AppUtilities.facebookLink(activity);
+                            } else if (drawerItem.getIdentifier() == 22) {
+                                AppUtilities.twitterLink(activity);
+                            } else if (drawerItem.getIdentifier() == 23) {
+                                AppUtilities.googlePlusLink(activity);
+                            } else if (drawerItem.getIdentifier() == 30) {
+                                // TODO: invoke SettingActivity
+                            } else if (drawerItem.getIdentifier() == 31) {
+                                AppUtilities.rateThisApp(activity);
+                            } else if (drawerItem.getIdentifier() == 32) {
+                                AppUtilities.shareApp(activity);
+                            } else if (drawerItem.getIdentifier() == 33) {
+                                ActivityUtilities.getInstance().invokeCustomUrlActivity(activity, CustomUrlActivity.class,
+                                        getResources().getString(R.string.privacy), getResources().getString(R.string.privacy_url), false);
+                            } else if (drawerItem.getIdentifier() == 40) {
+                                //TODO
                             }
                         }
 
@@ -136,16 +156,63 @@ public class MainActivity extends BaseActivity {
                 .withShowDrawerOnFirstLaunch(true)
                 .withShowDrawerUntilDraggedOpened(true)
                 .build();
-
-
     }
 
     @Override
     public void onBackPressed() {
-        if (drawer !=null && drawer.isDrawerOpen()){
+        if (drawer != null && drawer.isDrawerOpen()) {
             drawer.closeDrawer();
         } else {
-            AppUtilities.tapPromptToExit(this);
+            AppUtilities.tapPromtToExit(this);
         }
     }
+
+    private void loadData() {
+        showLoader();
+        loadJson();
+    }
+
+    private void loadJson() {
+        StringBuffer sb = new StringBuffer();
+        BufferedReader br = null;
+        try{
+            br = new BufferedReader(new InputStreamReader(getAssets().open(AppConstants.CONTENT_FILE)));
+            String temp;
+            while ((temp = br.readLine()) != null)
+                sb.append(temp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        parseJson(sb.toString());
+    }
+
+    private void parseJson(String jsonData) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONArray jsonArray = jsonObject.getJSONArray(AppConstants.JSON_KEY_ITEMS);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+
+                String categoryId = object.getString(AppConstants.JSON_KEY_CATEGORY_ID);
+                String categoryName = object.getString(AppConstants.JSON_KEY_CATEGORY_NAME);
+
+                categoryList.add(new CategoryModel(categoryId, categoryName));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        hideLoader();
+        adapter.notifyDataSetChanged();
+    }
 }
+
+
+
