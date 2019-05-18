@@ -62,7 +62,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     private boolean mUserHasPressed = false;
     private boolean mIsSkipped = false, mIsCorrect = false;
     
-    private String mQuetionText, mGivenAnswerText, mCorrectAnswerText, mCategoryId;
+    private String mQuestionText, mGivenAnswerText, mCorrectAnswerText, mCategoryId;
     
     private BeatBox mBeatBox;
     private List<SoundUtilities> mSounds;
@@ -198,7 +198,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
                                 decreaseLifeAndStatus();
                             } else if (currentItemIndex == mItemList.get(mQuestionPosition).getCorrectAnswer()) {
                                 mBackgroundColorList.set(currentItemIndex, AppConstants.COLOR_GREEN);
-                                ((LinearLayoutManager) mRecyclerQuiz.getLayoutManager()).scrollToPosition(currentItemIndex);
+                                (mRecyclerQuiz.getLayoutManager()).scrollToPosition(currentItemIndex);
                             }
                         }
                     } else {
@@ -278,7 +278,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
             mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_FIRST_INDEX));
         }
         mUserHasPressed = false;
-        if (mQuestionPosition < mItemList.size() -1 && mLifeCounter >0) {
+        if (mQuestionPosition < mItemList.size() - 1 && mLifeCounter > 0) {
             mQuestionPosition++;
             updateQuestionsAndAnswers ();
         } else if (mQuestionPosition < mItemList.size() - 1 && mLifeCounter == 0){
@@ -297,15 +297,15 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     private void updateQuestionsAndAnswers() {
         mOptionList.clear();
         mBackgroundColorList.clear();
-        ((LinearLayoutManager) mRecyclerQuiz.getLayoutManager()).scrollToPosition(AppConstants.BUNDLE_KEY_ZERO_INDEX);
+        (mRecyclerQuiz.getLayoutManager()).scrollToPosition(AppConstants.BUNDLE_KEY_ZERO_INDEX);
 
         mOptionList.addAll(mItemList.get(mQuestionPosition).getAnswers());
         mBackgroundColorList.addAll(mItemList.get(mQuestionPosition).getBackgroundColors());
         mAdapter.notifyDataSetChanged();
 
-        mQuetionText = mItemList.get(mQuestionPosition).getQuestion();
+        mQuestionText = mItemList.get(mQuestionPosition).getQuestion();
 
-        tvQuestionText.setText(Html.fromHtml(mQuetionText));
+        tvQuestionText.setText(Html.fromHtml(mQuestionText));
         tvQuestionTitle.setText(getResources().getString(R.string.quiz_question_title,mQuestionPosition + 1, mQuestionCount));
     }
 
