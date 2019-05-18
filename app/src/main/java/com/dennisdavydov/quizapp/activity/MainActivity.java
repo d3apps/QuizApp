@@ -64,7 +64,8 @@ public class MainActivity extends BaseActivity {
 
 
         recyclerView = findViewById(R.id.rvContent);
-        recyclerView.setLayoutManager(new GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(
+                new GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false));
 
         categoryList = new ArrayList<>();
         adapter = new CategoryAdapter(context, activity, categoryList);

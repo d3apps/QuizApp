@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,7 +55,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     private List<QuizModel> mItemList;
     private ArrayList<String> mOptionList, mBackgroundColorList;
     
-    private int mQuiestionPosition = 0,mQuestionCount = 0;
+    private int mQuestionPosition = 0,mQuestionCount = 0;
     private int mScore = 0, mWrongAnswer = 0, mSkip = 0;
     private int mLifeCounter = 5;
     
@@ -65,7 +64,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     
     private String mQuetionText, mGivenAnswerText, mCorrectAnswerText, mCategoryId;
     
-    //private BeatBox mBeatBox;
+    private BeatBox mBeatBox;
     private List<SoundUtilities> mSounds;
     private boolean isSoundOn;
     
@@ -97,8 +96,8 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
         mBackgroundColorList = new ArrayList<>();
         // TODO: mResultList = new ArrayList<>();
 
-        //mBeatBox = new BeatBox(mActivity);
-        //mSounds = mBeatBox.getSounds();
+        mBeatBox = new BeatBox(mActivity);
+        mSounds = mBeatBox.getSounds();
     }
 
     private void initView() {
@@ -181,41 +180,42 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
             public void onItemClick(int position, View view) {
                 if (!mUserHasPressed) {
                     int clickedAnswerIndex = position;
-                    if (mItemList.get(mQuiestionPosition).getCorrectAnswer()!= -1){
-                        for (int currentItemIndex = 0; currentItemIndex < mOptionList.size(); currentItemIndex++){
-                            if (currentItemIndex == clickedAnswerIndex &&
-                                    currentItemIndex == mItemList.get(mQuiestionPosition).getCorrectAnswer()){
+                    if (mItemList.get(mQuestionPosition).getCorrectAnswer() != -1) {
+                        for (int currentItemIndex = 0; currentItemIndex < mOptionList.size(); currentItemIndex++) {
+                            if (currentItemIndex == clickedAnswerIndex && currentItemIndex == mItemList.get(mQuestionPosition).getCorrectAnswer()) {
                                 mBackgroundColorList.set(currentItemIndex, AppConstants.COLOR_GREEN);
                                 mScore++;
                                 mIsCorrect = true;
-                                if (isSoundOn){
-                                    //mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_ZERO_INDEX));
+                                if (isSoundOn) {
+                                    mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_ZERO_INDEX));
                                 }
-                            } else if(currentItemIndex == clickedAnswerIndex &&
-                                    !(currentItemIndex == mItemList.get(mQuiestionPosition).getCorrectAnswer())){
-                                mBackgroundColorList.set(currentItemIndex,AppConstants.COLOR_RED);
+                            } else if (currentItemIndex == clickedAnswerIndex && !(currentItemIndex == mItemList.get(mQuestionPosition).getCorrectAnswer())) {
+                                mBackgroundColorList.set(currentItemIndex, AppConstants.COLOR_RED);
                                 mWrongAnswer++;
-                                if (isSoundOn){
-                                    //mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_SECOND_INDEX));
+                                if (isSoundOn) {
+                                    mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_SECOND_INDEX));
                                 }
                                 decreaseLifeAndStatus();
-                            } else  if (currentItemIndex == mItemList.get(mQuiestionPosition).getCorrectAnswer()){
-                                mBackgroundColorList.set(currentItemIndex,AppConstants.COLOR_GREEN);
+                            } else if (currentItemIndex == mItemList.get(mQuestionPosition).getCorrectAnswer()) {
+                                mBackgroundColorList.set(currentItemIndex, AppConstants.COLOR_GREEN);
                                 ((LinearLayoutManager) mRecyclerQuiz.getLayoutManager()).scrollToPosition(currentItemIndex);
                             }
                         }
                     } else {
-                        mBackgroundColorList.set(clickedAnswerIndex,AppConstants.COLOR_GREEN);
+                        mBackgroundColorList.set(clickedAnswerIndex, AppConstants.COLOR_GREEN);
                         mScore++;
                         mIsCorrect = true;
-                        //mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_ZERO_INDEX));
+                        mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_ZERO_INDEX));
                     }
-                    mGivenAnswerText = mItemList.get(mQuiestionPosition).getAnswers().get(clickedAnswerIndex);
-                    mCorrectAnswerText = mItemList.get(mQuiestionPosition).getAnswers().get(mItemList.get(mQuiestionPosition).getCorrectAnswer());
+
+                    mGivenAnswerText = mItemList.get(mQuestionPosition).getAnswers().get(clickedAnswerIndex);
+                    mCorrectAnswerText = mItemList.get(mQuestionPosition).getAnswers().get(mItemList.get(mQuestionPosition).getCorrectAnswer());
+
                     mUserHasPressed = true;
                     mAdapter.notifyDataSetChanged();
                 }
             }
+
         });
     }
 
@@ -275,13 +275,13 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
 
     private void setNextQuestion() {
         if (isSoundOn){
-            //mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_FIRST_INDEX));
+            mBeatBox.play(mSounds.get(AppConstants.BUNDLE_KEY_FIRST_INDEX));
         }
         mUserHasPressed = false;
-        if (mQuiestionPosition < mItemList.size() -1 && mLifeCounter >0) {
-            mQuiestionPosition++;
+        if (mQuestionPosition < mItemList.size() -1 && mLifeCounter >0) {
+            mQuestionPosition++;
             updateQuestionsAndAnswers ();
-        } else if (mQuiestionPosition < mItemList.size() - 1 && mLifeCounter == 0){
+        } else if (mQuestionPosition < mItemList.size() - 1 && mLifeCounter == 0){
             FragmentManager manager = getSupportFragmentManager();
             DialogUtilities dialog = DialogUtilities.newInstance(getResources().getString(R.string.dialog_title_chance),
                     getResources().getString(R.string.dialog_text_chance),
@@ -299,14 +299,14 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
         mBackgroundColorList.clear();
         ((LinearLayoutManager) mRecyclerQuiz.getLayoutManager()).scrollToPosition(AppConstants.BUNDLE_KEY_ZERO_INDEX);
 
-        mOptionList.addAll(mItemList.get(mQuiestionPosition).getAnswers());
-        mBackgroundColorList.addAll(mItemList.get(mQuiestionPosition).getBackgroundColors());
+        mOptionList.addAll(mItemList.get(mQuestionPosition).getAnswers());
+        mBackgroundColorList.addAll(mItemList.get(mQuestionPosition).getBackgroundColors());
         mAdapter.notifyDataSetChanged();
 
-        mQuetionText = mItemList.get(mQuiestionPosition).getQuestion();
+        mQuetionText = mItemList.get(mQuestionPosition).getQuestion();
 
         tvQuestionText.setText(Html.fromHtml(mQuetionText));
-        tvQuestionTitle.setText(getResources().getString(R.string.quiz_question_title,mQuiestionPosition + 1, mQuestionCount));
+        tvQuestionTitle.setText(getResources().getString(R.string.quiz_question_title,mQuestionPosition + 1, mQuestionCount));
     }
 
     public void quizActivityClosePrompt(){
@@ -403,8 +403,8 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
                 mSkip++;
                 // TODO: mIsSkipped = true;
                 mGivenAnswerText = getResources().getString(R.string.skipped_text);
-                mCorrectAnswerText = mItemList.get(mQuiestionPosition).getAnswers()
-                        .get(mItemList.get(mQuiestionPosition).getCorrectAnswer());
+                mCorrectAnswerText = mItemList.get(mQuestionPosition).getAnswers()
+                        .get(mItemList.get(mQuestionPosition).getCorrectAnswer());
                 //TODO: updateResultSet();
                 setNextQuestion();
             } else if (viewIdText.equals(AppConstants.BUNDLE_KEY_REWARD_OPTION)) {
@@ -420,7 +420,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mBeatBox.release();
+        mBeatBox.release();
     }
 
     @Override

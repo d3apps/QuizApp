@@ -36,6 +36,7 @@ public class BeatBox {
                 String assetPath = SOUNDS_FOLDER + "/" + filename;
                 SoundUtilities sound = new SoundUtilities(assetPath);
                 load(sound);
+                mSounds.add(sound);
             }catch (IOException e){
                 e.printStackTrace();
             }

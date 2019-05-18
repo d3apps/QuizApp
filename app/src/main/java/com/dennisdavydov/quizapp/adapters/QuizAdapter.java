@@ -54,8 +54,8 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
 
             this.itemClickListener = itemClickListener;
             // Find all views ids
-            tvItemTitle = itemView.findViewById(R.id.answer_text);
-            lytContainer = itemView.findViewById(R.id.card_view);
+            tvItemTitle = (TextView) itemView.findViewById(R.id.answer_text);
+            lytContainer = (CardView) itemView.findViewById(R.id.card_view);
 
             lytContainer.setOnClickListener(this);
 
