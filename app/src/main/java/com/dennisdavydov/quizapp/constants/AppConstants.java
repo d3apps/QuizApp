@@ -1,10 +1,8 @@
 package com.dennisdavydov.quizapp.constants;
 
 public class AppConstants {
-    public static final String FACEBOOK_FACEWEBMODAL = "fb//facewebmodal/f?href=";
-    public static final String FACEBOOK_PACKAGENAME = "com.facebook.katana";
-    public static final String TWITTER_PACKAGENAME = "com.twitter.android";
-    public static final String GOOGLE_PLAY_URL = " https://play.google.com/store/apps/details?id=";
+    public static final String APP_PREF_NAME = "quiz_app_pref";
+    public static final String KEY_SOUND = "sound";
 
     public static final int BUNDLE_KEY_ZERO_INDEX = 0;
     public static final int BUNDLE_KEY_FIRST_INDEX = 1;

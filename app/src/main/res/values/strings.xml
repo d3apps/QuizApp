@@ -40,10 +40,27 @@
     <string name="quiz">Тестирование</string>
     <string name="social">Ресурсы</string>
     <string name="youtube">YouTube</string>
-        <string name="others">Others</string>
+    <string name="others">Others</string>
     <string name="site">Fandroid.info</string>
     <string name="rate">Оцените приложение</string>
     <string name="about_dev">О приложении</string>
     <string name="site_menu_delete_all">Удалить все</string>
     <string name="intent_type">text/plain</string>
+    <string name="middle">Middle</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="quiz_promt_first_text">Previous result: %s from %s</string>
+    <string name="try_again">Try again?</string>
+    <string name="qiuz_prompt">Testing</string>
+    <string name="quiz_question_title">Question %d from %d</string>
+    <string name="quiz_prompt">Test</string>
+    <string name="next_question">Next question</string>
+    <string name="quiz_toolbar_title">Test</string>
+    <string name="dialog_title_skip">Skip?</string>
+    <string name="dialog_text_skip">Skip this Question?</string>
+    <string name="dialog_title_chance">One more chance?</string>
+    <string name="dialog_text_chance">Watch video and get additional life?</string>
+    <string name="stop_test">Stop test?</string>
+    <string name="skipped_text">You skipped this question.</string>
+
 </resources>

@@ -12,6 +12,7 @@ import android.view.View;
 import com.dennisdavydov.quizapp.R;
 import com.dennisdavydov.quizapp.adapters.CategoryAdapter;
 import com.dennisdavydov.quizapp.constants.AppConstants;
+import com.dennisdavydov.quizapp.listeners.ListItemClickListener;
 import com.dennisdavydov.quizapp.models.quiz.CategoryModel;
 import com.dennisdavydov.quizapp.utilities.ActivityUtilities;
 import com.dennisdavydov.quizapp.utilities.AppUtilities;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity {
 
         initLoader();
         loadData();
+        initListener();
 
         final IProfile profile = new ProfileDrawerItem().withIcon(R.drawable.ic_dev);
 
@@ -156,6 +158,20 @@ public class MainActivity extends BaseActivity {
                 .withShowDrawerOnFirstLaunch(true)
                 .withShowDrawerUntilDraggedOpened(true)
                 .build();
+    }
+
+    private void initListener() {
+        //recycler list item click listener
+        adapter.setItemClickListener(new ListItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                CategoryModel model = categoryList.get(position);
+                ActivityUtilities.getInstance()
+                        .invokeCommonQuizActivity(activity,
+                                QuizPromptActivity.class,model.getCategoryId(),
+                                true);
+            }
+        });
     }
 
     @Override
