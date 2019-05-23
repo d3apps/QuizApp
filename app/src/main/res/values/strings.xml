@@ -62,5 +62,18 @@
     <string name="dialog_text_chance">Watch video and get additional life?</string>
     <string name="stop_test">Stop test?</string>
     <string name="skipped_text">You skipped this question.</string>
+    <string name="score">correct</string>
+    <string name="wrong">Incorrect</string>
+    <string name="skipped">Skipped</string>
+    <string name="share_prompt">Share result!</string>
+    <string name="greeting_text1">Bad. Get ready and try again.</string>
+    <string name="greeting_text2">Good. But You can better!</string>
+    <string name="greeting_text3">Congratulations! Excellent result!</string>
+    <string name="share_now">Share now</string>
+    <string name="play_again">Play again</string>
+    <string name="your_ans">Your answer:</string>
+    <string name="correct_ans">Correct answer:</string>
+    <string name="results">Results</string>
+    <string name="sharing_text">My result %d. Try youself -</string>
 
 </resources>

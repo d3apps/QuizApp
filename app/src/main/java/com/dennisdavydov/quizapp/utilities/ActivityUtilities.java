@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.dennisdavydov.quizapp.constants.AppConstants;
+import com.dennisdavydov.quizapp.models.quiz.ResultModel;
+
+import java.util.ArrayList;
 
 public class ActivityUtilities {
 
@@ -15,7 +18,7 @@ public class ActivityUtilities {
         return activityUtilities;
     }
 
-    public void invokeNewActivity (Activity activity, Class<?> tClass,boolean shouldFinish){
+    public void invokeNewActivity (Activity activity, Class<?> tClass, boolean shouldFinish){
         Intent intent = new Intent(activity,tClass);
         activity.startActivity(intent);
         if (shouldFinish){
@@ -36,6 +39,21 @@ public class ActivityUtilities {
             (Activity activity, Class<?> tClass, String categoryId, boolean shouldFinish) {
         Intent intent = new Intent(activity, tClass);
         intent.putExtra(AppConstants.BUNDLE_KEY_INDEX, categoryId);
+        activity.startActivity(intent);
+        if (shouldFinish) {
+            activity.finish();
+        }
+    }
+
+    public  void invokeScoreCardActivity (Activity activity, Class<?> tClass, int questionsCount,
+         int score, int wrongAnswers, int skip, String categoryId, ArrayList<ResultModel> resultList, boolean shouldFinish){
+        Intent intent = new Intent(activity, tClass);
+        intent.putExtra(AppConstants.BUNDLE_KEY_SCORE, score);
+        intent.putExtra(AppConstants.QUESTIONS_IN_TEST, questionsCount);
+        intent.putExtra(AppConstants.BUNDLE_KEY_WRONG_ANS, wrongAnswers);
+        intent.putExtra(AppConstants.BUNDLE_KEY_SKIP, skip);
+        intent.putExtra(AppConstants.BUNDLE_KEY_INDEX, categoryId);
+        intent.putParcelableArrayListExtra(AppConstants.BUNDLE_KEY_ITEM, resultList);
         activity.startActivity(intent);
         if (shouldFinish) {
             activity.finish();

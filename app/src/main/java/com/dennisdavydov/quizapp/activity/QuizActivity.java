@@ -24,6 +24,7 @@ import com.dennisdavydov.quizapp.constants.AppConstants;
 import com.dennisdavydov.quizapp.data.preference.AppPreference;
 import com.dennisdavydov.quizapp.listeners.ListItemClickListener;
 import com.dennisdavydov.quizapp.models.quiz.QuizModel;
+import com.dennisdavydov.quizapp.models.quiz.ResultModel;
 import com.dennisdavydov.quizapp.utilities.ActivityUtilities;
 import com.dennisdavydov.quizapp.utilities.BeatBox;
 import com.dennisdavydov.quizapp.utilities.DialogUtilities;
@@ -67,7 +68,9 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
     private BeatBox mBeatBox;
     private List<SoundUtilities> mSounds;
     private boolean isSoundOn;
-    
+    private ArrayList<ResultModel> mResultList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
         mItemList = new ArrayList<>();
         mOptionList = new ArrayList<>();
         mBackgroundColorList = new ArrayList<>();
-        // TODO: mResultList = new ArrayList<>();
+        mResultList = new ArrayList<>();
 
         mBeatBox = new BeatBox(mActivity);
         mSounds = mBeatBox.getSounds();
@@ -169,7 +172,7 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
                             AppConstants.BUNDLE_KEY_SKIP_OPTION);
                     dialog.show(manager, AppConstants.BUNDLE_KEY_DIALOG_FRAGMENT);
                 } else {
-                    // TODO: updateResultSet ();
+                    updateResultSet ();
                     setNextQuestion ();
                 }
             }
@@ -217,9 +220,6 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
             }
 
         });
-    }
-
-    private void updateResultSet() {
     }
 
     private void decreaseLifeAndStatus() {
@@ -290,7 +290,8 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
                     AppConstants.BUNDLE_KEY_REWARD_OPTION);
             dialog.show(manager,AppConstants.BUNDLE_KEY_DIALOG_FRAGMENT);
         }else {
-            //TODO: invoke ScoreCardActivity
+            ActivityUtilities.getInstance().invokeScoreCardActivity(mActivity, ScoreCardActivity.class,
+                    mQuestionCount, mScore, mWrongAnswer, mSkip, mCategoryId, mResultList, true);
         }
     }
 
@@ -401,20 +402,27 @@ public class QuizActivity extends BaseActivity implements DialogUtilities.OnComp
                         .invokeNewActivity(mActivity,MainActivity.class,true);
             } else if (viewIdText.equals(AppConstants.BUNDLE_KEY_SKIP_OPTION)) {
                 mSkip++;
-                // TODO: mIsSkipped = true;
+                mIsSkipped = true;
                 mGivenAnswerText = getResources().getString(R.string.skipped_text);
                 mCorrectAnswerText = mItemList.get(mQuestionPosition).getAnswers()
                         .get(mItemList.get(mQuestionPosition).getCorrectAnswer());
-                //TODO: updateResultSet();
+                updateResultSet();
                 setNextQuestion();
             } else if (viewIdText.equals(AppConstants.BUNDLE_KEY_REWARD_OPTION)) {
                 // TODO: mRewardedVideoAd.show();
             }
         } else if (!isOkPressed && viewIdText.equals(AppConstants.BUNDLE_KEY_REWARD_OPTION)) {
-            // TODO: invokeScoreCardActivity();
+            ActivityUtilities.getInstance().invokeScoreCardActivity(mActivity, ScoreCardActivity.class,
+                    mQuestionCount, mScore, mWrongAnswer, mSkip, mCategoryId, mResultList, true);
             AppPreference.getInstance(mContext).setQuizResult(mCategoryId, mQuestionCount);
             AppPreference.getInstance(mContext).setQuizQuestionCount(mCategoryId,mQuestionCount);
         }
+    }
+
+    public void updateResultSet () {
+        mResultList.add(new ResultModel(mQuestionText, mGivenAnswerText, mCorrectAnswerText, mIsCorrect, mIsSkipped));
+        mIsCorrect = false;
+        mIsSkipped = false;
     }
 
     @Override

@@ -64,4 +64,7 @@ public class AppConstants {
     public static final float TRANSPARENT_CIRCLE_RADIUS = 65f;
     public static final int ANIMATION_VALUE = 2000;
 
+    //google play constants
+    public static final String PLAY_GOOGLE = " https://play.google.com/store/apps/details?id=";
+
 }
