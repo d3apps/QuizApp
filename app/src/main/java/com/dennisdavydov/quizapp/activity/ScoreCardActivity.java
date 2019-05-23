@@ -93,7 +93,7 @@ public class ScoreCardActivity extends BaseActivity  implements OnChartValueSele
 
         mSkip = mQuiestionsCount - (mScore + mWrongAnswer);
 
-        mSkipTextView.setText(String.valueOf(mScore));
+        mScoreTextView.setText(String.valueOf(mScore));
         mWrongAnswerTextView.setText(String.valueOf(mWrongAnswer));
         mSkipTextView.setText(String.valueOf(mSkip));
 

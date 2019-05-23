@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbarTop"/>
 
-    <include
-        layout="@layout/view_loader"/>
+
 
 </RelativeLayout>

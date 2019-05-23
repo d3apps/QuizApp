@@ -1,52 +1,44 @@
+
 {
-  "items": [
-    {
-      "question_category": "1",
-      "category_name": "Тест 1"
-    },
-    {
-      "question_category": "2",
-      "category_name": "Тест 2"
-    },
-    {
-      "question_category": "3",
-      "category_name": "Тест 3"
-    },
-    {
-      "question_category": "4",
-      "category_name": "Тест 4"
-    },
-    {
-      "question_category": "5",
-      "category_name": "Тест 5"
-    },
-    {
-      "question_category": "6",
-      "category_name": "Тест 6"
-    },
-    {
-      "question_category": "7",
-      "category_name": "Тест 7"
-    },
-    {
-      "question_category": "8",
-      "category_name": "Тест 8"
-    },
-    {
-      "question_category": "9",
-      "category_name": "Тест 9"
-    },
-    {
-      "question_category": "10",
-      "category_name": "Тест 10"
-    },
-    {
-      "question_category": "11",
-      "category_name": "Тест 11"
-    },
-    {
-      "question_category": "12",
-      "category_name": "Тест 12"
-    }
-  ]
+	"items": [
+		{"question_category": "1",
+		"category_name": "Conditionals"
+		},
+		{"question_category": "2",
+		"category_name": "Past Simple or Past Continuous?"
+		},
+		{"question_category": "3",
+		"category_name": "Past Simple or Past Perfect?"
+		},
+		{"question_category": "4",
+		"category_name": "Past Simple or Present Perfect?"
+		},
+		{"question_category": "5",
+		"category_name": "Present Simple or Past Simple?"
+		},
+		{"question_category": "6",
+		"category_name": "Present Simple or Present Continuous?"
+		},
+		{"question_category": "8",
+		"category_name": "The Gerund"
+		},
+		{"question_category": "9",
+		"category_name": "Complex Object"
+		},
+		{"question_category": "10",
+		"category_name": "Future Continuous"
+		},
+		{"question_category": "11",
+		"category_name": "Future Simple"
+		},
+		{"question_category": "12",
+		"category_name": "Much, Many, A lot of"
+		},
+		{"question_category": "13",
+		"category_name": "No, None, Nothing"
+		},
+		{"question_category": "14",
+		"category_name": "Few, Little"
+		}
+	]
 }

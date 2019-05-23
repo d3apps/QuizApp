@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.dennisdavydov.quizapp.R;
 import com.dennisdavydov.quizapp.adapters.CategoryAdapter;
@@ -43,6 +44,8 @@ public class MainActivity extends BaseActivity {
 
     private Toolbar toolbar;
 
+    private RelativeLayout mNotificationView;
+
     private AccountHeader header = null;
     private Drawer drawer = null;
 
@@ -62,7 +65,7 @@ public class MainActivity extends BaseActivity {
         context = getApplicationContext();
 
 
-
+        mNotificationView = findViewById(R.id.notificationView);
         recyclerView = findViewById(R.id.rvContent);
         recyclerView.setLayoutManager(
                 new GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false));
@@ -162,6 +165,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initListener() {
+        //TODO: notification view click listener
+
         //recycler list item click listener
         adapter.setItemClickListener(new ListItemClickListener() {
             @Override

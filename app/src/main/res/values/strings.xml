@@ -62,7 +62,7 @@
     <string name="dialog_text_chance">Watch video and get additional life?</string>
     <string name="stop_test">Stop test?</string>
     <string name="skipped_text">You skipped this question.</string>
-    <string name="score">correct</string>
+    <string name="score">Correct</string>
     <string name="wrong">Incorrect</string>
     <string name="skipped">Skipped</string>
     <string name="share_prompt">Share result!</string>
