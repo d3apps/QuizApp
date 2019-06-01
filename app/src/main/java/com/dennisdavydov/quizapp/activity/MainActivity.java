@@ -1,19 +1,25 @@
 package com.dennisdavydov.quizapp.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.dennisdavydov.quizapp.R;
 import com.dennisdavydov.quizapp.adapters.CategoryAdapter;
 import com.dennisdavydov.quizapp.constants.AppConstants;
+import com.dennisdavydov.quizapp.data.sqlite.NotificationDbController;
 import com.dennisdavydov.quizapp.listeners.ListItemClickListener;
+import com.dennisdavydov.quizapp.models.notification.NotificationModel;
 import com.dennisdavydov.quizapp.models.quiz.CategoryModel;
 import com.dennisdavydov.quizapp.utilities.ActivityUtilities;
 import com.dennisdavydov.quizapp.utilities.AppUtilities;
@@ -78,12 +84,12 @@ public class MainActivity extends BaseActivity {
         loadData();
         initListener();
 
-        final IProfile profile = new ProfileDrawerItem().withIcon(R.drawable.ic_dev);
+        final IProfile profile = new ProfileDrawerItem().withIcon(R.drawable.logo_icon_1);
 
         header = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
-                .withHeaderBackground(R.drawable.header)
+                .withHeaderBackground(R.drawable.egt_image)
                 .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
                     @Override
                     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
@@ -106,7 +112,7 @@ public class MainActivity extends BaseActivity {
                 .withHasStableIds(true)
                 .withAccountHeader(header)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("О приложении").withIcon(R.drawable.ic_dev).withIdentifier(10).withSelectable(false),
+                        new PrimaryDrawerItem().withName("О приложении").withIcon(R.drawable.logo_icon_1).withIdentifier(10).withSelectable(false),
 
                         new SecondaryDrawerItem().withName("YouTube").withIcon(R.drawable.ic_youtube).withIdentifier(20).withSelectable(false),
                         new SecondaryDrawerItem().withName("Facebook").withIcon(R.drawable.ic_facebook).withIdentifier(21).withSelectable(false),
@@ -164,8 +170,25 @@ public class MainActivity extends BaseActivity {
                 .build();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //register broadcast receiver
+        IntentFilter intentFilter =  new IntentFilter(AppConstants.NEW_NOTI);
+        LocalBroadcastManager.getInstance(this).registerReceiver(newNotificationReceiver,intentFilter);
+        initNotification();
+        // TODO: load full screen ad
+    }
+
     private void initListener() {
-        //TODO: notification view click listener
+        //notification view click listener
+        mNotificationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityUtilities.getInstance().invokeNewActivity(activity,NotificationListActivity.class,false);
+            }
+        });
 
         //recycler list item click listener
         adapter.setItemClickListener(new ListItemClickListener() {
@@ -178,6 +201,32 @@ public class MainActivity extends BaseActivity {
                                 true);
             }
         });
+    }
+
+    //received new broadcast
+    private BroadcastReceiver newNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initNotification();
+        }
+    };
+
+    private void initNotification() {
+        NotificationDbController notificationDbController = new NotificationDbController(context);
+        TextView notificationCount = findViewById(R.id.notificationCount);
+        notificationCount.setVisibility(View.INVISIBLE);
+
+        ArrayList<NotificationModel> notificationModelArrayList = notificationDbController.getUnreadData();
+
+        if (notificationModelArrayList != null && !notificationModelArrayList.isEmpty()) {
+            int totalUnread = notificationModelArrayList.size();
+            if (totalUnread > 0) {
+                notificationCount.setVisibility(View.VISIBLE);
+                notificationCount.setText(String.valueOf(totalUnread));
+            } else  {
+                notificationCount.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override

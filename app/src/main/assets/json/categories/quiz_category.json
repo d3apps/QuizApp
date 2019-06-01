@@ -19,26 +19,23 @@
 		{"question_category": "6",
 		"category_name": "Present Simple or Present Continuous?"
 		},
-		{"question_category": "8",
+		{"question_category": "7",
 		"category_name": "The Gerund"
 		},
-		{"question_category": "9",
+		{"question_category": "8",
 		"category_name": "Complex Object"
 		},
-		{"question_category": "10",
+		{"question_category": "9",
 		"category_name": "Future Continuous"
 		},
-		{"question_category": "11",
+		{"question_category": "10",
 		"category_name": "Future Simple"
 		},
-		{"question_category": "12",
+		{"question_category": "11",
 		"category_name": "Much, Many, A lot of"
 		},
-		{"question_category": "13",
+		{"question_category": "12",
 		"category_name": "No, None, Nothing"
-		},
-		{"question_category": "14",
-		"category_name": "Few, Little"
 		}
 	]
 }

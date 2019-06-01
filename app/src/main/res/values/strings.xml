@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Quizz Application</string>
-    <string name="tv_description">Try your brain!</string>
+    <string name="app_name">English Grammar Test</string>
+    <string name="tv_description">Try your knowledge!</string>
     <string name="about_app">About Application</string>
     <string name="you_tube">YouTube</string>
     <string name="facebook">FaceBook</string>
@@ -42,9 +42,9 @@
     <string name="youtube">YouTube</string>
     <string name="others">Others</string>
     <string name="site">Fandroid.info</string>
-    <string name="rate">Оцените приложение</string>
-    <string name="about_dev">О приложении</string>
-    <string name="site_menu_delete_all">Удалить все</string>
+    <string name="rate">Rate Application</string>
+    <string name="about_dev">About Application</string>
+    <string name="site_menu_delete_all">Delete all</string>
     <string name="intent_type">text/plain</string>
     <string name="middle">Middle</string>
     <string name="yes">yes</string>
@@ -74,6 +74,11 @@
     <string name="your_ans">Your answer:</string>
     <string name="correct_ans">Correct answer:</string>
     <string name="results">Results</string>
-    <string name="sharing_text">My result %d. Try youself -</string>
+    <string name="sharing_text">My result %d. Try yourself -</string>
+    <string name="title_post">Notification</string>
+    <string name="read_post">Tap here for reading</string>
+    <string name="presents">Presents</string>
+    <string name="notifications">Notifications</string>
+    <string name="delete">Delete all notifications?</string>
 
 </resources>
